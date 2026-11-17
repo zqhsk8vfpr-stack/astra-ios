@@ -3,471 +3,717 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#101014">
-<title>Astra Mobile Studio</title>
+<title>Astra</title>
 <style>
 :root {
-  --bg:#101014;--panel:#18181f;--panel2:#20202a;
-  --border:#2b2b36;--text:#f4f2fa;--muted:#858493;
-  --purple:#9b7aff;--green:#7bd9a6;--red:#ff777e;
+  --bg:#0d0d11;
+  --panel:#15151b;
+  --panel2:#1c1c24;
+  --border:#292932;
+  --text:#f5f5f7;
+  --muted:#858591;
+  --purple:#9b75ff;
+  --purple2:#7045d8;
+  --green:#54d69a;
+  --red:#ff667b;
+  --yellow:#f4c66a;
+  --font-size:14px;
+  --indent:2;
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);
-font-family:-apple-system,BlinkMacSystemFont,sans-serif;overflow:hidden}
-button{font:inherit;color:inherit;cursor:pointer}
-#app{position:fixed;inset:0;display:flex;flex-direction:column;
-background:var(--bg);padding-top:env(safe-area-inset-top);
-padding-bottom:env(safe-area-inset-bottom);opacity:0;pointer-events:none;
-transform:translateY(12px);transition:.25s}
-#app.open{opacity:1;pointer-events:auto;transform:translateY(0)}
-.topbar{height:62px;flex-shrink:0;display:flex;align-items:center;
-justify-content:space-between;padding:0 17px;border-bottom:1px solid var(--border)}
-.brand{display:flex;align-items:center;gap:10px}
-.logo{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;
-background:linear-gradient(145deg,#ad91ff,#7550d7);font-weight:900;font-size:19px}
-.brand-name{font-weight:750}.brand-sub{font-size:11px;color:var(--muted);margin-top:2px}
-.top-actions{display:flex;gap:8px}
-.icon-btn,.small-btn{background:var(--panel2);border:1px solid var(--border);
-border-radius:10px;padding:9px 12px}
-.content{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
-.page{display:none;flex:1;min-height:0;flex-direction:column;padding:16px}
-.page.active{display:flex}
-.heading{font-size:20px;font-weight:750;margin-bottom:5px}
-.subheading{font-size:12px;color:var(--muted);margin-bottom:15px}
-.tabs{display:flex;align-items:center;gap:7px;overflow-x:auto;
-flex-shrink:0;padding-bottom:10px;scrollbar-width:none}
-.tabs::-webkit-scrollbar{display:none}
-.tab{display:flex;align-items:center;gap:8px;white-space:nowrap;
-background:var(--panel);border:1px solid var(--border);
-border-radius:10px;padding:10px 12px;font-size:11px;color:var(--muted)}
-.tab.active{background:#302743;border-color:#8e70e6;color:#e4d9ff}
-.tab-close{font-size:14px;opacity:.7}
-.add-tab{flex-shrink:0;background:var(--panel2);border:1px solid var(--border);
-border-radius:10px;padding:9px 13px;color:var(--purple)}
-.editor-card{flex:1;min-height:0;display:flex;flex-direction:column;
-background:var(--panel);border:1px solid var(--border);border-radius:16px;overflow:hidden}
-.editor-top{height:40px;flex-shrink:0;display:flex;align-items:center;
-justify-content:space-between;padding:0 12px;border-bottom:1px solid var(--border);
-font-size:11px;color:var(--muted)}
-.editor-area{flex:1;min-height:0;display:flex;overflow:hidden}
-.gutter{width:39px;flex-shrink:0;overflow:hidden;text-align:right;
-padding:13px 9px 13px 0;background:#15151b;color:#666575;
-font:13px/22px monospace;white-space:pre}
-.code-wrap{flex:1;min-width:0;position:relative;overflow:hidden}
-#highlight,#editor{position:absolute;inset:0;width:100%;height:100%;
-margin:0;padding:13px;border:0;font:13px/22px monospace;
-white-space:pre;tab-size:4;overflow:auto}
-#highlight{pointer-events:none;color:#ddd9eb}
-#editor{resize:none;outline:none;background:transparent;color:transparent;
-caret-color:white;-webkit-text-fill-color:transparent}
-#editor::selection{background:#9b7aff55}
-.kw{color:#c49aff}.str{color:#a8dca9}.num{color:#e8bd83}
-.comment{color:#77778a}.fn{color:#86c9ef}
-.editor-footer{height:37px;flex-shrink:0;border-top:1px solid var(--border);
-display:flex;align-items:center;justify-content:space-between;
-padding:0 12px;color:var(--muted);font-size:10px}
-.actions{display:flex;gap:8px;margin-top:11px}
-.btn{flex:1;background:var(--panel2);border:1px solid var(--border);
-border-radius:11px;padding:12px 5px;font-size:11px;font-weight:650}
-.btn.primary{background:linear-gradient(135deg,#a184ff,#7955dc);border:0}
-.bottom-nav{height:65px;flex-shrink:0;border-top:1px solid var(--border);
-background:#141419;display:flex;justify-content:space-around;align-items:center}
-.nav-item{flex:1;height:100%;border:0;background:transparent;color:var(--muted);
-display:flex;flex-direction:column;align-items:center;justify-content:center;
-gap:4px;font-size:10px}
-.nav-icon{font-size:19px}.nav-item.active{color:var(--purple)}
-.console-box{flex:1;min-height:0;overflow:auto;background:#141419;
-border:1px solid var(--border);border-radius:14px;padding:12px;font:12px/1.8 monospace}
-.log{color:#c5c3d1;overflow-wrap:anywhere}.log.info{color:#91bdf4}
-.log.warn{color:#e8bd83}.log.error{color:#ff858c}.log.success{color:#7bd9a6}
-.section-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-.script-list{display:flex;flex-direction:column;gap:9px;overflow:auto}
-.script-card{background:var(--panel);border:1px solid var(--border);
-border-radius:13px;padding:13px;display:flex;align-items:center;
-justify-content:space-between;gap:8px}
-.script-title{font-size:13px;font-weight:650}
-.script-meta{font-size:11px;color:var(--muted);margin-top:5px}
-.script-actions{display:flex;gap:5px}
-.empty{color:var(--muted);font-size:12px;text-align:center;padding:30px 10px}
-#floatButton{position:fixed;z-index:20;left:20px;top:45%;width:53px;height:53px;
-border-radius:18px;border:1px solid #b59cff;background:linear-gradient(145deg,#a487ff,#704bd1);
-box-shadow:0 7px 28px #0008,0 0 20px #9570ff45;display:grid;place-items:center;
-font-size:24px;font-weight:900;touch-action:none;user-select:none}
-#floatButton.hidden{display:none}
-@media(min-width:700px){
-#app{width:min(650px,calc(100% - 40px));height:min(800px,calc(100% - 50px));
-inset:50% auto auto 50%;border:1px solid var(--border);border-radius:22px;overflow:hidden}
-#app.open{transform:translate(-50%,-50%)}
-#app:not(.open){transform:translate(-50%,-48%)}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  min-height:100vh;overflow:hidden;
 }
-@media(max-height:600px){.topbar{height:52px}.bottom-nav{height:53px}.page{padding:9px}}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+#floatButton{
+  position:fixed;right:22px;bottom:28px;width:58px;height:58px;
+  border:1px solid #b69aff;border-radius:20px;
+  background:linear-gradient(145deg,#a27aff,#6741c8);
+  color:white;font-size:23px;font-weight:800;
+  box-shadow:0 8px 30px #7045d866;z-index:20;
+  touch-action:none;
+}
+#app{
+  display:none;position:fixed;inset:0;background:var(--bg);
+  z-index:10;flex-direction:column;
+  padding-top:env(safe-area-inset-top);
+  padding-bottom:env(safe-area-inset-bottom);
+}
+#app.open{display:flex}
+.topbar{
+  height:58px;flex-shrink:0;display:flex;align-items:center;
+  justify-content:space-between;padding:0 15px;
+  border-bottom:1px solid var(--border);background:#111116;
+}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.5px}
+.logo{
+  width:32px;height:32px;border-radius:11px;
+  display:grid;place-items:center;
+  background:linear-gradient(145deg,#a27aff,#6741c8);
+}
+.brand small{display:block;color:var(--muted);font-size:10px;font-weight:500}
+.top-actions{display:flex;gap:8px}
+.iconbtn{
+  width:36px;height:36px;border:1px solid var(--border);
+  background:var(--panel);color:white;border-radius:11px;
+}
+.tabs{
+  display:flex;gap:7px;padding:10px 12px;
+  border-bottom:1px solid var(--border);overflow-x:auto;
+}
+.tab{
+  padding:9px 14px;border-radius:10px;border:1px solid transparent;
+  color:var(--muted);background:transparent;white-space:nowrap;
+}
+.tab.active{color:white;background:#292238;border-color:#6145a0}
+.workspace{flex:1;min-height:0;display:flex;flex-direction:column}
+.panel{display:none;flex:1;min-height:0;flex-direction:column}
+.panel.active{display:flex}
+.editor-head{
+  padding:10px 13px;display:flex;align-items:center;
+  justify-content:space-between;border-bottom:1px solid var(--border);
+  gap:8px;
+}
+.file-name{font-size:12px;color:#c9b8ff;overflow:hidden;text-overflow:ellipsis}
+.small-actions{display:flex;gap:6px}
+.smallbtn{
+  background:var(--panel2);color:#ddd;border:1px solid var(--border);
+  padding:7px 10px;border-radius:8px;font-size:11px;
+}
+.editor-wrap{flex:1;min-height:0;display:flex;overflow:hidden;background:#101015}
+.line-numbers{
+  width:42px;flex-shrink:0;padding:14px 8px 14px 0;
+  text-align:right;color:#555563;font:var(--font-size)/1.65 monospace;
+  white-space:pre;overflow:hidden;background:#101015;
+  user-select:none;
+}
+#editor{
+  flex:1;min-width:0;resize:none;border:0;outline:0;
+  background:transparent;color:#e6e1f4;
+  padding:14px 12px;font:var(--font-size)/1.65 monospace;
+  tab-size:var(--indent);white-space:pre;overflow:auto;
+  caret-color:var(--purple);
+}
+#editor.wrap{white-space:pre-wrap;overflow-wrap:anywhere}
+.statusbar{
+  height:28px;flex-shrink:0;background:#17151f;
+  border-top:1px solid var(--border);display:flex;
+  align-items:center;justify-content:space-between;
+  padding:0 12px;color:var(--muted);font-size:10px;
+}
+.bottom-nav{
+  display:flex;justify-content:space-around;gap:5px;
+  padding:9px 8px calc(9px + env(safe-area-inset-bottom));
+  border-top:1px solid var(--border);background:#111116;
+}
+.navbtn{
+  flex:1;padding:10px 3px;border:0;border-radius:10px;
+  color:var(--muted);background:transparent;font-size:11px;
+}
+.navbtn.active{background:#292238;color:#c9b8ff}
+.section-head{padding:16px 15px 10px}
+.section-head h2{font-size:17px;margin:0 0 5px}
+.section-head p{font-size:12px;color:var(--muted);margin:0}
+.settings-scroll,.console-scroll,.library-scroll{overflow:auto;flex:1;padding:12px}
+.setting-card,.console-card,.script-card{
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:13px;padding:14px;margin-bottom:10px;
+}
+.setting-title{font-size:13px;font-weight:700;margin-bottom:8px}
+.setting-desc{font-size:11px;color:var(--muted);margin-bottom:12px}
+.setting-row{display:flex;justify-content:space-between;align-items:center;gap:12px}
+select,input[type="text"]{
+  background:var(--panel2);border:1px solid var(--border);
+  border-radius:9px;color:white;padding:9px;outline:none;
+}
+input[type="range"]{width:100%;accent-color:var(--purple)}
+.toggle{
+  width:44px;height:25px;border:0;border-radius:20px;
+  background:#393943;position:relative;
+}
+.toggle:after{
+  content:"";position:absolute;width:19px;height:19px;
+  left:3px;top:3px;border-radius:50%;background:white;transition:.2s;
+}
+.toggle.on{background:var(--purple)}
+.toggle.on:after{left:22px}
+.filter-row{display:flex;gap:7px;overflow-x:auto;padding:12px}
+.filter{
+  border:1px solid var(--border);background:var(--panel);
+  color:var(--muted);padding:8px 13px;border-radius:9px;
+  white-space:nowrap;font-size:11px;
+}
+.filter.active{background:#302448;color:#d7c8ff;border-color:#7554ba}
+.log{
+  padding:11px;border-radius:10px;background:#111116;
+  border:1px solid var(--border);margin-bottom:8px;
+  font:12px/1.5 monospace;overflow-wrap:anywhere;
+}
+.log .tag{font-weight:800;margin-right:8px}
+.log.info .tag{color:var(--green)}
+.log.warn .tag{color:var(--yellow)}
+.log.error .tag{color:var(--red)}
+.log time{display:block;color:#777;font-size:10px;margin-top:4px}
+.empty{text-align:center;color:var(--muted);padding:35px 12px;font-size:12px}
+.script-card{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.script-card strong{font-size:13px;display:block}
+.script-card small{color:var(--muted);font-size:10px}
+.script-actions{display:flex;gap:6px}
+.primary{
+  background:var(--purple2);color:white;border:0;
+  border-radius:9px;padding:9px 12px;font-size:11px;
+}
+.danger{color:#ff8292}
+.modal{
+  display:none;position:fixed;inset:0;background:#0009;
+  z-index:30;align-items:center;justify-content:center;padding:20px;
+}
+.modal.show{display:flex}
+.modal-box{
+  width:100%;max-width:350px;background:var(--panel);
+  border:1px solid var(--border);border-radius:17px;padding:18px;
+}
+.modal-box h3{margin:0 0 14px;font-size:16px}
+.modal-box input{width:100%;margin-bottom:12px}
+.modal-actions{display:flex;justify-content:flex-end;gap:8px}
+@media(min-width:700px){
+  #app{inset:20px;border:1px solid var(--border);border-radius:18px;overflow:hidden}
+  .editor-wrap{max-width:1100px;width:100%;margin:auto}
+}
 </style>
 </head>
 <body>
 
-<button id="floatButton">A</button>
+<button id="floatButton" aria-label="Open Astra">A</button>
 
-<main id="app">
-<header class="topbar">
-  <div class="brand">
-    <div class="logo">A</div>
-    <div><div class="brand-name">astra</div><div class="brand-sub">Mobile Studio v4</div></div>
-  </div>
-  <div class="top-actions">
-    <button class="icon-btn" id="saveTop">↓</button>
-    <button class="icon-btn" id="closeApp">×</button>
-  </div>
-</header>
+<div id="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">A</div>
+      <div>ASTRA<small>CODE WORKSPACE · V5</small></div>
+    </div>
+    <div class="top-actions">
+      <button class="iconbtn" id="newTabBtn" title="New tab">＋</button>
+      <button class="iconbtn" id="closeAppBtn" title="Close">×</button>
+    </div>
+  </header>
 
-<section class="content">
-  <div class="page active" id="editorPage">
-    <div class="heading">Editor</div>
-    <div class="subheading">Your Luau workspace.</div>
+  <div class="tabs" id="scriptTabs"></div>
 
-    <div class="tabs" id="tabs"></div>
-
-    <div class="editor-card">
-      <div class="editor-top">
-        <span id="fileName">main.luau</span>
-        <span style="color:var(--green)">● Local editor</span>
-      </div>
-      <div class="editor-area">
-        <div class="gutter" id="gutter">1</div>
-        <div class="code-wrap">
-          <pre id="highlight"></pre>
-          <textarea id="editor" autocapitalize="off" autocomplete="off"
-          autocorrect="off" spellcheck="false" wrap="off"
-          aria-label="Luau editor"></textarea>
+  <main class="workspace">
+    <section class="panel active" id="editorPanel">
+      <div class="editor-head">
+        <span class="file-name" id="activeFile">untitled.lua</span>
+        <div class="small-actions">
+          <button class="smallbtn" id="renameBtn">Rename</button>
+          <button class="smallbtn" id="saveBtn">Save</button>
         </div>
       </div>
-      <div class="editor-footer">
-        <span id="lineCount">1 line</span>
-        <span id="charCount">0 characters</span>
+      <div class="editor-wrap">
+        <div class="line-numbers" id="lineNumbers">1</div>
+        <textarea id="editor" spellcheck="false" autocapitalize="off"
+          autocomplete="off" autocorrect="off"
+          placeholder="-- Start writing your Luau code..."></textarea>
       </div>
-    </div>
+      <div class="statusbar">
+        <span id="lineStatus">Ln 1, Col 1</span>
+        <span id="saveStatus">Ready</span>
+        <span>Luau</span>
+      </div>
+    </section>
 
-    <div class="actions">
-      <button class="btn" id="renameTab">Rename</button>
-      <button class="btn" id="copyCode">Copy</button>
-      <button class="btn primary" id="checkCode">Check editor</button>
+    <section class="panel" id="consolePanel">
+      <div class="section-head">
+        <h2>Console</h2>
+        <p>Local workspace messages</p>
+      </div>
+      <div class="filter-row">
+        <button class="filter active" data-filter="all">All</button>
+        <button class="filter" data-filter="info">Info</button>
+        <button class="filter" data-filter="warn">Warnings</button>
+        <button class="filter" data-filter="error">Errors</button>
+      </div>
+      <div class="console-scroll" id="consoleOutput"></div>
+      <div class="editor-head">
+        <button class="smallbtn" id="testLogBtn">Add test message</button>
+        <button class="smallbtn" id="clearLogsBtn">Clear console</button>
+      </div>
+    </section>
+
+    <section class="panel" id="libraryPanel">
+      <div class="section-head">
+        <h2>Script Library</h2>
+        <p>Saved locally on this device</p>
+      </div>
+      <div class="library-scroll" id="libraryList"></div>
+    </section>
+
+    <section class="panel" id="settingsPanel">
+      <div class="section-head">
+        <h2>Editor Settings</h2>
+        <p>Customize your Astra workspace</p>
+      </div>
+      <div class="settings-scroll">
+        <div class="setting-card">
+          <div class="setting-title">Font size</div>
+          <div class="setting-desc">Adjust the editor text size.</div>
+          <div class="setting-row">
+            <input id="fontRange" type="range" min="11" max="22" value="14">
+            <strong id="fontValue">14px</strong>
+          </div>
+        </div>
+
+        <div class="setting-card">
+          <div class="setting-title">Indentation</div>
+          <div class="setting-desc">Choose the number of spaces for Tab.</div>
+          <select id="indentSelect">
+            <option value="2">2 spaces</option>
+            <option value="4">4 spaces</option>
+            <option value="8">8 spaces</option>
+          </select>
+        </div>
+
+        <div class="setting-card">
+          <div class="setting-row">
+            <div>
+              <div class="setting-title">Word wrap</div>
+              <div class="setting-desc">Wrap long lines inside the editor.</div>
+            </div>
+            <button class="toggle" id="wrapToggle" aria-label="Toggle word wrap"></button>
+          </div>
+        </div>
+
+        <div class="setting-card">
+          <div class="setting-row">
+            <div>
+              <div class="setting-title">Auto-save</div>
+              <div class="setting-desc">Save open tabs automatically on this device.</div>
+            </div>
+            <button class="toggle on" id="autoSaveToggle" aria-label="Toggle auto save"></button>
+          </div>
+        </div>
+
+        <div class="setting-card">
+          <div class="setting-title">Workspace information</div>
+          <div class="setting-desc">Your scripts and preferences are stored in this browser using local storage.</div>
+          <button class="smallbtn" id="resetSettingsBtn">Reset editor settings</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="bottom-nav">
+    <button class="navbtn active" data-panel="editorPanel">⌨ Editor</button>
+    <button class="navbtn" data-panel="consolePanel">▤ Console</button>
+    <button class="navbtn" data-panel="libraryPanel">▣ Library</button>
+    <button class="navbtn" data-panel="settingsPanel">⚙ Settings</button>
+  </nav>
+</div>
+
+<div class="modal" id="renameModal">
+  <div class="modal-box">
+    <h3>Rename script</h3>
+    <input type="text" id="renameInput" maxlength="40" placeholder="Script name">
+    <div class="modal-actions">
+      <button class="smallbtn" id="cancelRename">Cancel</button>
+      <button class="primary" id="confirmRename">Save name</button>
     </div>
   </div>
-
-  <div class="page" id="consolePage">
-    <div class="heading">Console</div>
-    <div class="subheading">Workspace messages and editor checks.</div>
-    <div class="section-row">
-      <span style="font-size:11px;color:var(--muted)">OUTPUT</span>
-      <div><button class="small-btn" id="copyLogs">Copy</button>
-      <button class="small-btn" id="clearLogs">Clear</button></div>
-    </div>
-    <div class="console-box" id="consoleOutput">
-      <div class="log info">Astra v4 initialized.</div>
-      <div class="log">Multi-tab editor ready.</div>
-    </div>
-  </div>
-
-  <div class="page" id="libraryPage">
-    <div class="heading">Library</div>
-    <div class="subheading">Scripts saved on this device.</div>
-    <div class="section-row">
-      <span style="font-size:11px;color:var(--muted)">MY SCRIPTS</span>
-      <button class="small-btn" id="saveScript">＋ Save current</button>
-    </div>
-    <div class="script-list" id="scriptList"></div>
-  </div>
-</section>
-
-<nav class="bottom-nav">
-  <button class="nav-item active" data-page="editorPage"><span class="nav-icon">⌘</span>Editor</button>
-  <button class="nav-item" data-page="consolePage"><span class="nav-icon">▤</span>Console</button>
-  <button class="nav-item" data-page="libraryPage"><span class="nav-icon">▣</span>Library</button>
-</nav>
-</main>
+</div>
 
 <script>
 const $ = id => document.getElementById(id);
-const app = $("app");
-const editor = $("editor");
-const output = $("consoleOutput");
+const STORAGE_TABS = "astra_v5_tabs";
+const STORAGE_LIBRARY = "astra_v5_library";
+const STORAGE_SETTINGS = "astra_v5_settings";
+const STORAGE_LOGS = "astra_v5_logs";
+const OLD_TABS = "astra_v4_tabs";
+const OLD_LIBRARY = "astra_v4_library";
 
-function log(message,type=""){
-  const el=document.createElement("div");
-  el.className="log "+type;
-  el.textContent="["+new Date().toLocaleTimeString()+"] "+message;
-  output.appendChild(el);
-  output.scrollTop=output.scrollHeight;
-}
-
-function loadData(key,fallback){
-  try{
-    const value=JSON.parse(localStorage.getItem(key));
-    return value ?? fallback;
-  }catch{return fallback}
-}
-
-let scripts=loadData("astra_v4_tabs",[
-  {id:1,name:"main.luau",code:'-- Welcome to Astra v4\n-- Your mobile Luau workspace\n\nlocal message = "Hello, Astra!"\n\nprint(message)'}
-]);
-let activeId=scripts[0]?.id ?? 1;
-let library=loadData("astra_v4_library",[]);
-let nextId=Math.max(0,...scripts.map(s=>Number(s.id)||0))+1;
-
-function activeScript(){return scripts.find(s=>s.id===activeId)}
-function persist(){
-  try{
-    localStorage.setItem("astra_v4_tabs",JSON.stringify(scripts));
-    localStorage.setItem("astra_v4_library",JSON.stringify(library));
-  }catch{log("Device storage is full or unavailable.","error")}
-}
-
-function escapeHTML(s){
-  return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-}
-
-function colorize(code){
-  const regex=/(--[^\n]*|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|\b\d+(?:\.\d+)?\b|\b(?:local|function|end|if|then|else|elseif|for|while|do|repeat|until|return|true|false|nil|and|or|not|in|break)\b|\b(?:print|warn|require|pairs|ipairs|type|tostring|tonumber)\b)/g;
-  return escapeHTML(code).replace(regex,t=>{
-    let c="kw";
-    if(t.startsWith("--"))c="comment";
-    else if(t.startsWith('"')||t.startsWith("'"))c="str";
-    else if(/^\d/.test(t))c="num";
-    else if(/^(print|warn|require|pairs|ipairs|type|tostring|tonumber)$/.test(t))c="fn";
-    return `<span class="${c}">${t}</span>`;
-  });
-}
-
-function updateEditor(){
-  const code=editor.value;
-  $("highlight").innerHTML=colorize(code)+(code.endsWith("\n")?" ":"");
-  const lines=code.split("\n").length;
-  $("gutter").textContent=Array.from({length:lines},(_,i)=>i+1).join("\n");
-  $("lineCount").textContent=lines+(lines===1?" line":" lines");
-  $("charCount").textContent=code.length+" characters";
-  $("fileName").textContent=activeScript()?.name||"untitled.luau";
-  $("highlight").scrollTop=editor.scrollTop;
-  $("highlight").scrollLeft=editor.scrollLeft;
-  $("gutter").scrollTop=editor.scrollTop;
-}
-
-function saveActive(){
-  const s=activeScript();
-  if(s)s.code=editor.value;
-  persist();
-}
-
-function renderTabs(){
-  const container=$("tabs");
-  container.replaceChildren();
-  scripts.forEach(s=>{
-    const tab=document.createElement("button");
-    tab.className="tab"+(s.id===activeId?" active":"");
-    const name=document.createElement("span");
-    name.textContent=s.name;
-    tab.appendChild(name);
-    if(scripts.length>1){
-      const close=document.createElement("span");
-      close.className="tab-close";
-      close.textContent="×";
-      close.addEventListener("click",e=>{
-        e.stopPropagation();
-        closeTab(s.id);
-      });
-      tab.appendChild(close);
-    }
-    tab.addEventListener("click",()=>switchTab(s.id));
-    container.appendChild(tab);
-  });
-  const add=document.createElement("button");
-  add.className="add-tab";
-  add.textContent="+";
-  add.setAttribute("aria-label","New tab");
-  add.addEventListener("click",newTab);
-  container.appendChild(add);
-}
-
-function switchTab(id){
-  saveActive();
-  activeId=id;
-  editor.value=activeScript()?.code||"";
-  renderTabs();
-  updateEditor();
-}
-
-function newTab(){
-  saveActive();
-  const name="script"+nextId+".luau";
-  const s={id:nextId++,name,code:"-- New Luau project\n\n"};
-  scripts.push(s);
-  activeId=s.id;
-  editor.value=s.code;
-  persist();
-  renderTabs();
-  updateEditor();
-  log("Created "+name,"success");
-}
-
-function closeTab(id){
-  if(scripts.length===1){log("At least one tab must remain open.","warn");return}
-  const index=scripts.findIndex(s=>s.id===id);
-  scripts=scripts.filter(s=>s.id!==id);
-  if(activeId===id){
-    const replacement=scripts[Math.max(0,index-1)];
-    activeId=replacement.id;
-    editor.value=replacement.code;
+function read(key, fallback) {
+  try {
+    const value = localStorage.getItem(key);
+    return value ? JSON.parse(value) : fallback;
+  } catch {
+    return fallback;
   }
-  persist();
-  renderTabs();
-  updateEditor();
-  log("Tab closed.","info");
 }
 
-function renameActive(){
-  const s=activeScript();
-  if(!s)return;
-  const name=prompt("Enter a new file name:",s.name);
-  if(!name?.trim())return;
-  s.name=name.trim().endsWith(".luau")?name.trim():name.trim()+".luau";
-  persist();
-  renderTabs();
-  updateEditor();
-  log("Renamed file to "+s.name,"success");
+let tabs = read(STORAGE_TABS, null);
+if (!tabs) {
+  tabs = read(OLD_TABS, null);
+}
+if (!Array.isArray(tabs) || !tabs.length) {
+  tabs = [{id: Date.now(), name:"untitled.lua", code:"-- Welcome to Astra V5\n\n"}];
 }
 
-editor.addEventListener("input",()=>{updateEditor();saveActive()});
-editor.addEventListener("scroll",updateEditor);
-editor.addEventListener("keydown",e=>{
-  if(e.key==="Tab"){
-    e.preventDefault();
-    editor.setRangeText("    ",editor.selectionStart,editor.selectionEnd,"end");
-    updateEditor();saveActive();
-  }
-  if(e.key==="Enter"){
-    const start=editor.selectionStart;
-    const indent=(editor.value.slice(0,start).split("\n").pop().match(/^\s*/)||[""])[0];
-    if(indent){
-      e.preventDefault();
-      editor.setRangeText("\n"+indent,start,editor.selectionEnd,"end");
-      updateEditor();saveActive();
-    }
-  }
+let library = read(STORAGE_LIBRARY, null);
+if (!library) library = read(OLD_LIBRARY, []);
+if (!Array.isArray(library)) library = [];
+
+let settings = read(STORAGE_SETTINGS, {
+  fontSize:14, indent:2, wrap:false, autoSave:true
 });
 
-$("renameTab").onclick=renameActive;
-$("copyCode").onclick=async()=>{
-  try{await navigator.clipboard.writeText(editor.value);log("Code copied.","success")}
-  catch{log("Clipboard unavailable.","error")}
-};
-$("checkCode").onclick=()=>{
-  saveActive();
-  log("Editor check complete: "+editor.value.split("\n").length+" lines.","success");
-  log("This workspace does not execute Luau or connect to Roblox.","info");
-};
+let logs = read(STORAGE_LOGS, []);
+let activeId = Number(localStorage.getItem("astra_v5_active")) || tabs[0].id;
+let currentFilter = "all";
 
-function switchPage(id){
-  document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id===id));
-  document.querySelectorAll(".nav-item").forEach(b=>b.classList.toggle("active",b.dataset.page===id));
+if (!tabs.some(t => t.id === activeId)) activeId = tabs[0].id;
+
+function activeTab() {
+  return tabs.find(t => t.id === activeId) || tabs[0];
 }
-document.querySelectorAll(".nav-item").forEach(b=>b.onclick=()=>switchPage(b.dataset.page));
 
-function renderLibrary(){
-  const list=$("scriptList");
-  list.replaceChildren();
-  if(!library.length){
-    const empty=document.createElement("div");
-    empty.className="empty";
-    empty.textContent="No saved projects yet.";
-    list.appendChild(empty);
+function persist() {
+  localStorage.setItem(STORAGE_TABS, JSON.stringify(tabs));
+  localStorage.setItem(STORAGE_LIBRARY, JSON.stringify(library));
+  localStorage.setItem(STORAGE_SETTINGS, JSON.stringify(settings));
+  localStorage.setItem("astra_v5_active", String(activeId));
+}
+
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, char => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[char]));
+}
+
+function renderTabs() {
+  $("scriptTabs").innerHTML = tabs.map(tab => `
+    <button class="tab ${tab.id === activeId ? "active" : ""}"
+      data-id="${tab.id}">${escapeHTML(tab.name)}</button>
+  `).join("");
+
+  document.querySelectorAll(".tab").forEach(button => {
+    button.addEventListener("click", () => {
+      saveCurrentCode();
+      activeId = Number(button.dataset.id);
+      persist();
+      renderAll();
+    });
+  });
+}
+
+function renderEditor() {
+  const tab = activeTab();
+  $("activeFile").textContent = tab.name;
+  $("editor").value = tab.code || "";
+  updateLines();
+  updateCursor();
+}
+
+function renderAll() {
+  renderTabs();
+  renderEditor();
+  renderLibrary();
+}
+
+function saveCurrentCode() {
+  if (!activeTab()) return;
+  activeTab().code = $("editor").value;
+  if (settings.autoSave) persist();
+  $("saveStatus").textContent = "Saved locally";
+}
+
+function updateLines() {
+  const count = $("editor").value.split("\n").length;
+  $("lineNumbers").textContent = Array.from(
+    {length:count}, (_,i) => i+1
+  ).join("\n");
+  $("lineNumbers").scrollTop = $("editor").scrollTop;
+}
+
+function updateCursor() {
+  const text = $("editor").value;
+  const pos = $("editor").selectionStart;
+  const before = text.slice(0,pos);
+  const line = before.split("\n").length;
+  const col = before.length - before.lastIndexOf("\n");
+  $("lineStatus").textContent = `Ln ${line}, Col ${col}`;
+}
+
+function applySettings() {
+  document.documentElement.style.setProperty("--font-size", settings.fontSize + "px");
+  document.documentElement.style.setProperty("--indent", settings.indent);
+  $("editor").classList.toggle("wrap", !!settings.wrap);
+  $("fontRange").value = settings.fontSize;
+  $("fontValue").textContent = settings.fontSize + "px";
+  $("indentSelect").value = String(settings.indent);
+  $("wrapToggle").classList.toggle("on", !!settings.wrap);
+  $("autoSaveToggle").classList.toggle("on", !!settings.autoSave);
+}
+
+function newTab() {
+  saveCurrentCode();
+  const id = Date.now() + Math.floor(Math.random()*1000);
+  tabs.push({id, name:"untitled.lua", code:""});
+  activeId = id;
+  persist();
+  renderAll();
+}
+
+function renameTab() {
+  $("renameInput").value = activeTab().name;
+  $("renameModal").classList.add("show");
+  $("renameInput").focus();
+}
+
+function confirmRename() {
+  const name = $("renameInput").value.trim();
+  if (!name) return;
+  activeTab().name = name.endsWith(".lua") ? name : name + ".lua";
+  $("renameModal").classList.remove("show");
+  persist();
+  renderTabs();
+  $("activeFile").textContent = activeTab().name;
+}
+
+function saveToLibrary() {
+  saveCurrentCode();
+  const tab = activeTab();
+  const existing = library.find(item => item.name === tab.name);
+  if (existing) {
+    existing.code = tab.code;
+    existing.updated = Date.now();
+  } else {
+    library.push({
+      id:Date.now(), name:tab.name, code:tab.code, updated:Date.now()
+    });
+  }
+  persist();
+  renderLibrary();
+  addLog("info", `Saved ${tab.name} to your library.`);
+}
+
+function renderLibrary() {
+  const target = $("libraryList");
+  if (!library.length) {
+    target.innerHTML = '<div class="empty">Your library is empty.<br>Save a script from the editor to add it here.</div>';
     return;
   }
-  library.forEach((item,index)=>{
-    const card=document.createElement("div");
-    card.className="script-card";
-    const info=document.createElement("div");
-    const title=document.createElement("div");
-    title.className="script-title";
-    title.textContent=item.name;
-    const meta=document.createElement("div");
-    meta.className="script-meta";
-    meta.textContent=item.code.split("\n").length+" lines";
-    info.append(title,meta);
-    const actions=document.createElement("div");
-    actions.className="script-actions";
-    const open=document.createElement("button");
-    open.className="small-btn";open.textContent="Open";
-    open.onclick=()=>{
-      saveActive();
-      const s=activeScript();
-      s.code=item.code;
-      s.name=item.name;
-      editor.value=s.code;
-      persist();renderTabs();updateEditor();
-      switchPage("editorPage");
-      log("Opened "+item.name,"success");
-    };
-    const del=document.createElement("button");
-    del.className="small-btn";del.textContent="Delete";
-    del.onclick=()=>{
-      library.splice(index,1);persist();renderLibrary();log("Saved item deleted.","warn");
-    };
-    actions.append(open,del);
-    card.append(info,actions);
-    list.appendChild(card);
+  target.innerHTML = library.map(item => `
+    <div class="script-card">
+      <div>
+        <strong>${escapeHTML(item.name)}</strong>
+        <small>Saved script · Local device</small>
+      </div>
+      <div class="script-actions">
+        <button class="smallbtn" data-open="${item.id}">Open</button>
+        <button class="smallbtn danger" data-delete="${item.id}">Delete</button>
+      </div>
+    </div>
+  `).join("");
+
+  target.querySelectorAll("[data-open]").forEach(button => {
+    button.addEventListener("click", () => {
+      const item = library.find(x => x.id === Number(button.dataset.open));
+      if (!item) return;
+      saveCurrentCode();
+      const existing = tabs.find(t => t.name === item.name);
+      if (existing) {
+        activeId = existing.id;
+        existing.code = item.code;
+      } else {
+        const id = Date.now();
+        tabs.push({id, name:item.name, code:item.code});
+        activeId = id;
+      }
+      showPanel("editorPanel");
+      persist();
+      renderAll();
+    });
+  });
+
+  target.querySelectorAll("[data-delete]").forEach(button => {
+    button.addEventListener("click", () => {
+      library = library.filter(x => x.id !== Number(button.dataset.delete));
+      persist();
+      renderLibrary();
+    });
   });
 }
 
-$("saveScript").onclick=()=>{
-  const name=prompt("Name this saved script:",activeScript()?.name||"My Script");
-  if(!name?.trim())return;
-  library.unshift({name:name.trim(),code:editor.value});
-  persist();renderLibrary();log("Saved "+name.trim(),"success");
-};
-$("saveTop").onclick=()=>{$("saveScript").click()};
-$("clearLogs").onclick=()=>{output.replaceChildren();log("Console cleared.","info")};
-$("copyLogs").onclick=async()=>{
-  try{await navigator.clipboard.writeText([...output.children].map(x=>x.textContent).join("\n"));log("Console copied.","success")}
-  catch{log("Could not copy console.","error")}
-};
-
-$("closeApp").onclick=closeApp;
-function openApp(){
-  app.classList.add("open");
-  $("floatButton").classList.add("hidden");
+function addLog(type, message) {
+  logs.unshift({type, message, time:new Date().toLocaleTimeString()});
+  logs = logs.slice(0,200);
+  localStorage.setItem(STORAGE_LOGS, JSON.stringify(logs));
+  renderLogs();
 }
-function closeApp(){
-  saveActive();
-  app.classList.remove("open");
-  $("floatButton").classList.remove("hidden");
+
+function renderLogs() {
+  const visible = logs.filter(log =>
+    currentFilter === "all" || log.type === currentFilter
+  );
+  $("consoleOutput").innerHTML = visible.length
+    ? visible.map(log => `
+      <div class="log ${log.type}">
+        <span class="tag">[${log.type.toUpperCase()}]</span>
+        ${escapeHTML(log.message)}
+        <time>${escapeHTML(log.time)}</time>
+      </div>
+    `).join("")
+    : '<div class="empty">No messages in this filter.</div>';
 }
-$("floatButton").addEventListener("click",openApp);
 
-// Drag floating button
-const floater=$("floatButton");
-let drag=false,moved=false,sx=0,sy=0,ox=0,oy=0;
-floater.addEventListener("pointerdown",e=>{
-  drag=true;moved=false;sx=e.clientX;sy=e.clientY;
-  const r=floater.getBoundingClientRect();ox=r.left;oy=r.top;
-  floater.setPointerCapture(e.pointerId);
-});
-floater.addEventListener("pointermove",e=>{
-  if(!drag)return;
-  const dx=e.clientX-sx,dy=e.clientY-sy;
-  if(Math.abs(dx)+Math.abs(dy)>7)moved=true;
-  if(!moved)return;
-  floater.style.left=Math.max(5,Math.min(innerWidth-58,ox+dx))+"px";
-  floater.style.top=Math.max(5,Math.min(innerHeight-58,oy+dy))+"px";
-});
-floater.addEventListener("pointerup",()=>{
-  if(!drag)return;
-  drag=false;
-  if(!moved)openApp();
+function showPanel(panelId) {
+  document.querySelectorAll(".panel").forEach(panel =>
+    panel.classList.toggle("active", panel.id === panelId)
+  );
+  document.querySelectorAll(".navbtn").forEach(button =>
+    button.classList.toggle("active", button.dataset.panel === panelId)
+  );
+  if (panelId === "consolePanel") renderLogs();
+  if (panelId === "libraryPanel") renderLibrary();
+}
+
+$("editor").addEventListener("input", () => {
+  activeTab().code = $("editor").value;
+  updateLines();
+  updateCursor();
+  if (settings.autoSave) {
+    persist();
+    $("saveStatus").textContent = "Saved locally";
+  } else {
+    $("saveStatus").textContent = "Unsaved changes";
+  }
 });
 
-editor.value=activeScript()?.code||"";
-renderTabs();
-renderLibrary();
-updateEditor();
+$("editor").addEventListener("scroll", () => {
+  $("lineNumbers").scrollTop = $("editor").scrollTop;
+});
+
+$("editor").addEventListener("click", updateCursor);
+$("editor").addEventListener("keyup", updateCursor);
+
+$("editor").addEventListener("keydown", event => {
+  if (event.key === "Tab") {
+    event.preventDefault();
+    const editor = $("editor");
+    const start = editor.selectionStart;
+    const end = editor.selectionEnd;
+    const spaces = " ".repeat(Number(settings.indent) || 2);
+    editor.setRangeText(spaces, start, end, "end");
+    editor.dispatchEvent(new Event("input"));
+  }
+});
+
+$("newTabBtn").addEventListener("click", newTab);
+$("renameBtn").addEventListener("click", renameTab);
+$("saveBtn").addEventListener("click", saveToLibrary);
+$("confirmRename").addEventListener("click", confirmRename);
+$("cancelRename").addEventListener("click", () =>
+  $("renameModal").classList.remove("show")
+);
+
+$("fontRange").addEventListener("input", event => {
+  settings.fontSize = Number(event.target.value);
+  applySettings();
+  persist();
+});
+
+$("indentSelect").addEventListener("change", event => {
+  settings.indent = Number(event.target.value);
+  applySettings();
+  persist();
+});
+
+$("wrapToggle").addEventListener("click", () => {
+  settings.wrap = !settings.wrap;
+  applySettings();
+  persist();
+});
+
+$("autoSaveToggle").addEventListener("click", () => {
+  settings.autoSave = !settings.autoSave;
+  applySettings();
+  persist();
+});
+
+$("resetSettingsBtn").addEventListener("click", () => {
+  settings = {fontSize:14, indent:2, wrap:false, autoSave:true};
+  applySettings();
+  persist();
+});
+
+document.querySelectorAll(".navbtn").forEach(button => {
+  button.addEventListener("click", () => showPanel(button.dataset.panel));
+});
+
+document.querySelectorAll(".filter").forEach(button => {
+  button.addEventListener("click", () => {
+    currentFilter = button.dataset.filter;
+    document.querySelectorAll(".filter").forEach(b =>
+      b.classList.toggle("active", b === button)
+    );
+    renderLogs();
+  });
+});
+
+$("testLogBtn").addEventListener("click", () =>
+  addLog("info", "Astra workspace test message.")
+);
+
+$("clearLogsBtn").addEventListener("click", () => {
+  logs = [];
+  localStorage.setItem(STORAGE_LOGS, JSON.stringify(logs));
+  renderLogs();
+});
+
+$("closeAppBtn").addEventListener("click", () => {
+  saveCurrentCode();
+  $("app").classList.remove("open");
+});
+
+const floater = $("floatButton");
+let dragging = false;
+let moved = false;
+let startX = 0;
+let startY = 0;
+let startLeft = 0;
+let startTop = 0;
+
+floater.addEventListener("pointerdown", event => {
+  dragging = true;
+  moved = false;
+  startX = event.clientX;
+  startY = event.clientY;
+  const rect = floater.getBoundingClientRect();
+  startLeft = rect.left;
+  startTop = rect.top;
+  floater.setPointerCapture(event.pointerId);
+});
+
+floater.addEventListener("pointermove", event => {
+  if (!dragging) return;
+  const dx = event.clientX - startX;
+  const dy = event.clientY - startY;
+  if (Math.abs(dx) > 5 || Math.abs(dy) > 5) moved = true;
+  if (moved) {
+    floater.style.left = Math.max(0, Math.min(innerWidth-58, startLeft+dx)) + "px";
+    floater.style.top = Math.max(0, Math.min(innerHeight-58, startTop+dy)) + "px";
+    floater.style.right = "auto";
+    floater.style.bottom = "auto";
+  }
+});
+
+floater.addEventListener("pointerup", () => {
+  dragging = false;
+  if (!moved) $("app").classList.toggle("open");
+});
+
+floater.addEventListener("pointercancel", () => {
+  dragging = false;
+});
+
+applySettings();
+renderAll();
+renderLogs();
+addLog("info", "Astra V5 workspace loaded.");
 </script>
 </body>
 </html>
