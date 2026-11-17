@@ -19,7 +19,6 @@
 }
 
 * { box-sizing:border-box; }
-
 body {
   margin:0;
   background:var(--bg);
@@ -27,7 +26,6 @@ body {
   font-family:-apple-system,BlinkMacSystemFont,sans-serif;
   min-height:100dvh;
 }
-
 button { font:inherit; cursor:pointer; }
 
 #astra-float {
@@ -44,10 +42,9 @@ button { font:inherit; cursor:pointer; }
   font-weight:900;
   box-shadow:0 0 28px #9b5cff66;
   z-index:200;
-  transition:transform .2s;
+  touch-action:none;
+  user-select:none;
 }
-
-#astra-float:active { transform:scale(.9); }
 
 #astra-app {
   position:fixed;
@@ -60,7 +57,6 @@ button { font:inherit; cursor:pointer; }
   visibility:hidden;
   transition:transform .3s ease,visibility .3s;
 }
-
 #astra-app.open {
   transform:translateY(0);
   visibility:visible;
@@ -75,14 +71,12 @@ button { font:inherit; cursor:pointer; }
   background:#110d19;
   border-bottom:1px solid var(--border);
 }
-
 .brand {
   color:var(--purple);
   font-size:23px;
   font-weight:900;
   letter-spacing:3px;
 }
-
 .brand small {
   display:block;
   color:var(--muted);
@@ -90,18 +84,12 @@ button { font:inherit; cursor:pointer; }
   letter-spacing:2px;
   margin-top:3px;
 }
-
 .header-actions {
   display:flex;
   align-items:center;
   gap:10px;
 }
-
-.online {
-  color:#91e7b1;
-  font-size:10px;
-}
-
+.online { color:#91e7b1; font-size:10px; }
 .close-btn {
   border:1px solid var(--border);
   color:white;
@@ -118,22 +106,12 @@ button { font:inherit; cursor:pointer; }
   padding:20px 16px 25px;
   overscroll-behavior:contain;
 }
-
 .page { display:none; }
 .page.active { display:block; }
 
 .welcome { margin-bottom:22px; }
-
-.welcome h1 {
-  font-size:24px;
-  margin:0 0 6px;
-}
-
-.welcome p {
-  color:var(--muted);
-  font-size:13px;
-  margin:0;
-}
+.welcome h1 { font-size:24px; margin:0 0 6px; }
+.welcome p { color:var(--muted); font-size:13px; margin:0; }
 
 .card {
   background:linear-gradient(145deg,#191323,#120f19);
@@ -142,20 +120,13 @@ button { font:inherit; cursor:pointer; }
   padding:15px;
   margin-bottom:15px;
 }
-
 .section-head {
   display:flex;
   justify-content:space-between;
   align-items:center;
   margin-bottom:13px;
 }
-
-.section-head h3 {
-  font-size:12px;
-  letter-spacing:1px;
-  margin:0;
-}
-
+.section-head h3 { font-size:12px; letter-spacing:1px; margin:0; }
 .tag {
   font-size:10px;
   color:var(--purple);
@@ -170,7 +141,6 @@ button { font:inherit; cursor:pointer; }
   border-radius:12px;
   overflow:hidden;
 }
-
 .editor-top {
   display:flex;
   justify-content:space-between;
@@ -179,7 +149,6 @@ button { font:inherit; cursor:pointer; }
   font-size:11px;
   border-bottom:1px solid var(--border);
 }
-
 textarea {
   display:block;
   width:100%;
@@ -193,7 +162,6 @@ textarea {
   caret-color:var(--purple);
   font:13px/1.7 monospace;
 }
-
 textarea::placeholder { color:#655b70; }
 
 .buttons {
@@ -202,7 +170,6 @@ textarea::placeholder { color:#655b70; }
   gap:10px;
   margin-top:13px;
 }
-
 .btn {
   border:1px solid var(--border);
   background:var(--surface2);
@@ -212,14 +179,11 @@ textarea::placeholder { color:#655b70; }
   font-size:12px;
   font-weight:700;
 }
-
 .btn:active { transform:scale(.97); }
-
 .primary {
   background:linear-gradient(135deg,#a875f5,#7541c4);
   border:0;
 }
-
 .console {
   height:240px;
   overflow-y:auto;
@@ -229,13 +193,11 @@ textarea::placeholder { color:#655b70; }
   padding:12px;
   font:11px/1.7 monospace;
 }
-
 .entry {
   padding:6px 0;
   border-bottom:1px solid #211a2a;
   overflow-wrap:anywhere;
 }
-
 .info { color:#c7a8ff; }
 .warn { color:#f3c778; }
 .error { color:#ff8181; }
@@ -248,7 +210,6 @@ textarea::placeholder { color:#655b70; }
   background:#130f1b;
   border-top:1px solid var(--border);
 }
-
 .nav-item {
   background:transparent;
   border:0;
@@ -256,13 +217,7 @@ textarea::placeholder { color:#655b70; }
   font-size:11px;
   padding:7px 0;
 }
-
-.nav-item span {
-  display:block;
-  font-size:19px;
-  margin-bottom:4px;
-}
-
+.nav-item span { display:block; font-size:19px; margin-bottom:4px; }
 .nav-item.active { color:var(--purple); }
 
 .empty {
@@ -271,37 +226,24 @@ textarea::placeholder { color:#655b70; }
   font-size:13px;
   padding:25px 5px;
 }
-
 .script-row {
   display:flex;
   align-items:center;
-  justify-content:space-between;
   gap:8px;
   margin-bottom:9px;
 }
-
-.script-row button {
-  flex:1;
-  text-align:left;
-}
+.script-row button { flex:1; text-align:left; }
 
 @media(min-width:650px) {
-  .content {
-    width:100%;
-    max-width:650px;
-    margin:auto;
-  }
+  .content { width:100%; max-width:650px; margin:auto; }
 }
 </style>
 </head>
 
 <body>
 
-<!-- FLOATING ASTRA BUTTON -->
-<button id="astra-float" aria-label="Open Astra"
-onclick="openAstra()">A</button>
+<button id="astra-float" aria-label="Open Astra">A</button>
 
-<!-- MAIN ASTRA INTERFACE -->
 <div id="astra-app">
 
 <header class="app-header">
@@ -309,18 +251,15 @@ onclick="openAstra()">A</button>
     ASTRA
     <small>MOBILE DEVELOPMENT</small>
   </div>
-
   <div class="header-actions">
     <span class="online">● READY</span>
-    <button class="close-btn" onclick="closeAstra()">✕</button>
+    <button class="close-btn" id="closeBtn">✕</button>
   </div>
 </header>
 
 <main class="content">
 
-<!-- EDITOR -->
 <section id="editorPage" class="page active">
-
   <div class="welcome">
     <h1>Welcome to Astra.</h1>
     <p>Your mobile Luau development environment.</p>
@@ -331,23 +270,18 @@ onclick="openAstra()">A</button>
       <h3>SCRIPT EDITOR</h3>
       <span class="tag">LUAU</span>
     </div>
-
     <div class="editor-wrap">
       <div class="editor-top">
         <span>untitled.lua</span>
         <span id="charCount">0 characters</span>
       </div>
-
-      <textarea id="editor"
-        spellcheck="false"
-        autocapitalize="off"
-        autocomplete="off"
+      <textarea id="editor" spellcheck="false"
+        autocapitalize="off" autocomplete="off"
         placeholder="-- Write your Luau code here..."></textarea>
     </div>
-
     <div class="buttons">
-      <button class="btn primary" onclick="testScript()">Test script</button>
-      <button class="btn" onclick="clearEditor()">Clear</button>
+      <button class="btn primary" id="testBtn">Test script</button>
+      <button class="btn" id="clearEditorBtn">Clear</button>
     </div>
   </div>
 
@@ -360,79 +294,57 @@ onclick="openAstra()">A</button>
       Interface initialized. Sandboxed Luau runtime not connected.
     </p>
   </div>
-
 </section>
 
-<!-- CONSOLE -->
 <section id="consolePage" class="page">
-
   <div class="welcome">
     <h1>Console</h1>
     <p>Monitor messages and test results.</p>
   </div>
-
   <div class="card">
     <div class="section-head">
       <h3>LOG OUTPUT</h3>
       <span class="tag" id="logCount">0 ENTRIES</span>
     </div>
-
     <div class="console" id="logs"></div>
-
     <div class="buttons">
-      <button class="btn" onclick="clearLogs()">Clear logs</button>
-      <button class="btn primary" onclick="copyLogs()">Copy output</button>
+      <button class="btn" id="clearLogsBtn">Clear logs</button>
+      <button class="btn primary" id="copyLogsBtn">Copy output</button>
     </div>
   </div>
-
 </section>
 
-<!-- LIBRARY -->
 <section id="libraryPage" class="page">
-
   <div class="welcome">
     <h1>Script Library</h1>
     <p>Manage your saved scripts.</p>
   </div>
-
   <div class="card">
     <div class="section-head">
       <h3>MY SCRIPTS</h3>
       <span class="tag">LIBRARY</span>
     </div>
-
-    <div id="library">
-      <div class="empty">No saved scripts yet.</div>
-    </div>
-
-    <button class="btn primary"
-      style="width:100%"
-      onclick="saveScript()">Save current script</button>
+    <div id="library"></div>
+    <button class="btn primary" style="width:100%" id="saveBtn">
+      Save current script
+    </button>
   </div>
-
 </section>
 
 </main>
 
-<!-- BOTTOM NAVIGATION -->
 <nav class="bottom-nav">
-
-  <button class="nav-item active"
-    onclick="navigate('editor',this)">
+  <button class="nav-item active" data-page="editor">
     <span>⌨</span>Editor
   </button>
-
-  <button class="nav-item"
-    onclick="navigate('console',this)">
+  <button class="nav-item" data-page="console">
     <span>▤</span>Console
   </button>
-
-  <button class="nav-item"
-    onclick="navigate('library',this)">
+  <button class="nav-item" data-page="library">
     <span>▣</span>Library
   </button>
-
 </nav>
+
 </div>
 
 <script>
@@ -442,7 +354,25 @@ const editor = document.getElementById("editor");
 const logs = document.getElementById("logs");
 const library = document.getElementById("library");
 
+const STORAGE_KEY = "astra_scripts_v2";
+
 let savedScripts = [];
+try {
+  const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+  if (Array.isArray(stored)) savedScripts = stored;
+} catch {
+  savedScripts = [];
+}
+
+function persistScripts() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(savedScripts));
+    return true;
+  } catch {
+    log("Storage unavailable or full.", "error");
+    return false;
+  }
+}
 
 function openAstra() {
   app.classList.add("open");
@@ -454,27 +384,27 @@ function closeAstra() {
   floating.style.display = "block";
 }
 
-function navigate(page,button) {
-  document.querySelectorAll(".page").forEach(p => {
-    p.classList.remove("active");
-  });
+document.getElementById("closeBtn").addEventListener("click", closeAstra);
+floating.addEventListener("click", openAstra);
 
+document.querySelectorAll(".nav-item").forEach(button => {
+  button.addEventListener("click", () => {
+    navigate(button.dataset.page, button);
+  });
+});
+
+function navigate(page, button) {
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
   document.getElementById(page + "Page").classList.add("active");
 
-  document.querySelectorAll(".nav-item").forEach(n => {
-    n.classList.remove("active");
-  });
-
+  document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
   button.classList.add("active");
 }
 
-function log(message,type="info") {
+function log(message, type="info") {
   const entry = document.createElement("div");
-
   entry.className = "entry " + type;
-
-  entry.textContent =
-    "[" + new Date().toLocaleTimeString() + "] " + message;
+  entry.textContent = "[" + new Date().toLocaleTimeString() + "] " + message;
 
   logs.appendChild(entry);
   logs.scrollTop = logs.scrollHeight;
@@ -483,20 +413,20 @@ function log(message,type="info") {
     logs.children.length + " ENTRIES";
 }
 
-editor.addEventListener("input",() => {
+editor.addEventListener("input", () => {
   document.getElementById("charCount").textContent =
     editor.value.length + " characters";
 });
 
 function testScript() {
-  if(!editor.value.trim()) {
-    log("Editor is empty.","warn");
+  if (!editor.value.trim()) {
+    log("Editor is empty.", "warn");
     return;
   }
 
   log("Test started.");
   log("Received " + editor.value.length + " characters.");
-  log("Luau runtime not connected yet.","warn");
+  log("Luau runtime not connected yet.", "warn");
 }
 
 function clearEditor() {
@@ -507,80 +437,143 @@ function clearEditor() {
 
 function clearLogs() {
   logs.replaceChildren();
-
-  document.getElementById("logCount").textContent =
-    "0 ENTRIES";
+  document.getElementById("logCount").textContent = "0 ENTRIES";
 }
 
 async function copyLogs() {
   const content = Array.from(logs.children)
-    .map(item => item.textContent)
-    .join("\n");
+    .map(item => item.textContent).join("\n");
 
   try {
     await navigator.clipboard.writeText(content);
     log("Output copied.");
   } catch {
-    log("Clipboard unavailable.","error");
+    log("Clipboard unavailable.", "error");
   }
-}
-
-function saveScript() {
-  const code = editor.value.trim();
-
-  if(!code) {
-    log("Nothing to save.","warn");
-    return;
-  }
-
-  const name = "Script " + (savedScripts.length + 1);
-
-  savedScripts.push({name,code});
-
-  renderLibrary();
-  log(name + " saved in this session.");
 }
 
 function renderLibrary() {
   library.replaceChildren();
 
-  if(savedScripts.length === 0) {
-    library.innerHTML =
-      '<div class="empty">No saved scripts yet.</div>';
+  if (!savedScripts.length) {
+    const empty = document.createElement("div");
+    empty.className = "empty";
+    empty.textContent = "No saved scripts yet.";
+    library.appendChild(empty);
     return;
   }
 
-  savedScripts.forEach((script,index) => {
+  savedScripts.forEach((script, index) => {
     const row = document.createElement("div");
     row.className = "script-row";
 
     const load = document.createElement("button");
     load.className = "btn";
     load.textContent = script.name;
-
-    load.onclick = () => {
+    load.addEventListener("click", () => {
       editor.value = script.code;
       editor.dispatchEvent(new Event("input"));
-      navigate("editor",document.querySelector(".nav-item"));
+      navigate("editor", document.querySelector('[data-page="editor"]'));
       log(script.name + " loaded.");
-    };
+    });
 
     const remove = document.createElement("button");
     remove.className = "btn";
     remove.textContent = "×";
+    remove.setAttribute("aria-label", "Delete " + script.name);
 
-    remove.onclick = () => {
-      savedScripts.splice(index,1);
+    remove.addEventListener("click", () => {
+      savedScripts.splice(index, 1);
+      persistScripts();
       renderLibrary();
       log("Script removed.");
-    };
+    });
 
-    row.append(load,remove);
+    row.append(load, remove);
     library.appendChild(row);
   });
 }
 
+function saveScript() {
+  const code = editor.value.trim();
+
+  if (!code) {
+    log("Nothing to save.", "warn");
+    return;
+  }
+
+  const name = "Script " + (savedScripts.length + 1);
+  savedScripts.push({ name, code });
+
+  if (!persistScripts()) {
+    savedScripts.pop();
+    return;
+  }
+
+  renderLibrary();
+  log(name + " saved.");
+}
+
+document.getElementById("testBtn").addEventListener("click", testScript);
+document.getElementById("clearEditorBtn").addEventListener("click", clearEditor);
+document.getElementById("clearLogsBtn").addEventListener("click", clearLogs);
+document.getElementById("copyLogsBtn").addEventListener("click", copyLogs);
+document.getElementById("saveBtn").addEventListener("click", saveScript);
+
+// Floating button drag support.
+let pointerStart = null;
+let moved = false;
+let dragging = false;
+
+floating.addEventListener("pointerdown", event => {
+  pointerStart = {
+    x: event.clientX,
+    y: event.clientY,
+    left: floating.getBoundingClientRect().left,
+    top: floating.getBoundingClientRect().top
+  };
+  moved = false;
+  dragging = false;
+  floating.setPointerCapture(event.pointerId);
+});
+
+floating.addEventListener("pointermove", event => {
+  if (!pointerStart) return;
+
+  const dx = event.clientX - pointerStart.x;
+  const dy = event.clientY - pointerStart.y;
+
+  if (!dragging && Math.hypot(dx, dy) > 8) {
+    dragging = true;
+    moved = true;
+  }
+
+  if (!dragging) return;
+
+  const x = Math.max(0, Math.min(innerWidth - 60, pointerStart.left + dx));
+  const y = Math.max(0, Math.min(innerHeight - 60, pointerStart.top + dy));
+
+  floating.style.left = x + "px";
+  floating.style.top = y + "px";
+  floating.style.right = "auto";
+  floating.style.bottom = "auto";
+});
+
+floating.addEventListener("pointerup", () => {
+  pointerStart = null;
+  dragging = false;
+});
+
+floating.addEventListener("click", event => {
+  if (moved) {
+    event.stopImmediatePropagation();
+    moved = false;
+  }
+}, true);
+
+renderLibrary();
 log("Astra initialized.");
+log("Persistent script storage ready.");
 log("Console ready.");
 </script>
 
