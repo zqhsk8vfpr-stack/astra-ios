@@ -3,579 +3,759 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0b0912">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#101014">
 <title>Astra</title>
 
 <style>
 :root {
-  --bg:#0b0912;
-  --surface:#15111e;
-  --surface2:#21192d;
-  --border:#352943;
-  --purple:#a875f5;
-  --text:#f5efff;
-  --muted:#91869f;
+  --bg:#101014;
+  --panel:#18181f;
+  --panel2:#20202a;
+  --border:#2b2b36;
+  --text:#f4f2fa;
+  --muted:#858493;
+  --purple:#9b7aff;
+  --purple2:#7654dc;
+  --green:#7bd9a6;
+  --red:#ff777e;
 }
 
 * { box-sizing:border-box; }
+
 body {
   margin:0;
   background:var(--bg);
   color:var(--text);
-  font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;
   min-height:100dvh;
-}
-button { font:inherit; cursor:pointer; }
-
-#astra-float {
-  position:fixed;
-  right:20px;
-  bottom:calc(25px + env(safe-area-inset-bottom));
-  width:60px;
-  height:60px;
-  border-radius:20px;
-  background:linear-gradient(145deg,#bd94ff,#713bc4);
-  color:white;
-  border:1px solid #d8c0ff;
-  font-size:24px;
-  font-weight:900;
-  box-shadow:0 0 28px #9b5cff66;
-  z-index:200;
-  touch-action:none;
-  user-select:none;
+  overflow:hidden;
 }
 
-#astra-app {
+button { font:inherit; color:inherit; cursor:pointer; }
+
+#app {
   position:fixed;
   inset:0;
-  z-index:150;
-  background:var(--bg);
   display:flex;
   flex-direction:column;
-  transform:translateY(105%);
-  visibility:hidden;
-  transition:transform .3s ease,visibility .3s;
-}
-#astra-app.open {
-  transform:translateY(0);
-  visibility:visible;
+  background:var(--bg);
+  padding-top:env(safe-area-inset-top);
+  padding-bottom:env(safe-area-inset-bottom);
+  transform:translateY(12px);
+  opacity:0;
+  pointer-events:none;
+  transition:.25s ease;
 }
 
-.app-header {
+#app.open {
+  transform:translateY(0);
+  opacity:1;
+  pointer-events:auto;
+}
+
+.topbar {
+  height:64px;
   flex-shrink:0;
-  padding:calc(17px + env(safe-area-inset-top)) 18px 15px;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  background:#110d19;
+  padding:0 19px;
   border-bottom:1px solid var(--border);
 }
+
 .brand {
-  color:var(--purple);
-  font-size:23px;
-  font-weight:900;
-  letter-spacing:3px;
-}
-.brand small {
-  display:block;
-  color:var(--muted);
-  font-size:9px;
-  letter-spacing:2px;
-  margin-top:3px;
-}
-.header-actions {
   display:flex;
   align-items:center;
-  gap:10px;
+  gap:11px;
 }
-.online { color:#91e7b1; font-size:10px; }
-.close-btn {
-  border:1px solid var(--border);
-  color:white;
-  background:var(--surface2);
+
+.logo {
   width:36px;
   height:36px;
+  display:grid;
+  place-items:center;
+  border-radius:12px;
+  background:linear-gradient(145deg,#ad91ff,#7550d7);
+  color:white;
+  font-weight:900;
+  font-size:19px;
+  box-shadow:0 4px 18px #8e68ff35;
+}
+
+.brand-name { font-weight:750; letter-spacing:.3px; }
+.brand-sub { font-size:11px; color:var(--muted); margin-top:2px; }
+
+.top-actions { display:flex; gap:8px; }
+
+.icon-btn {
+  width:36px;
+  height:36px;
+  border:1px solid var(--border);
   border-radius:11px;
-  font-size:17px;
+  background:var(--panel);
+  display:grid;
+  place-items:center;
+  font-size:15px;
 }
 
 .content {
   flex:1;
-  overflow-y:auto;
-  padding:20px 16px 25px;
-  overscroll-behavior:contain;
+  min-height:0;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
 }
-.page { display:none; }
-.page.active { display:block; }
 
-.welcome { margin-bottom:22px; }
-.welcome h1 { font-size:24px; margin:0 0 6px; }
-.welcome p { color:var(--muted); font-size:13px; margin:0; }
+.page {
+  display:none;
+  flex:1;
+  min-height:0;
+  flex-direction:column;
+  padding:18px;
+}
 
-.card {
-  background:linear-gradient(145deg,#191323,#120f19);
+.page.active { display:flex; }
+
+.heading {
+  font-size:20px;
+  font-weight:750;
+  margin-bottom:5px;
+}
+
+.subheading {
+  color:var(--muted);
+  font-size:12px;
+  margin-bottom:18px;
+}
+
+.editor-card {
+  flex:1;
+  min-height:0;
+  display:flex;
+  flex-direction:column;
+  background:var(--panel);
   border:1px solid var(--border);
   border-radius:17px;
-  padding:15px;
-  margin-bottom:15px;
-}
-.section-head {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:13px;
-}
-.section-head h3 { font-size:12px; letter-spacing:1px; margin:0; }
-.tag {
-  font-size:10px;
-  color:var(--purple);
-  background:#281b3c;
-  padding:6px 9px;
-  border-radius:7px;
-}
-
-.editor-wrap {
-  background:#0b0911;
-  border:1px solid var(--border);
-  border-radius:12px;
   overflow:hidden;
 }
+
 .editor-top {
-  display:flex;
-  justify-content:space-between;
-  padding:10px 12px;
-  color:var(--muted);
-  font-size:11px;
-  border-bottom:1px solid var(--border);
-}
-textarea {
-  display:block;
-  width:100%;
-  height:270px;
-  resize:vertical;
-  padding:14px;
-  background:transparent;
-  border:0;
-  outline:none;
-  color:#d9c5ff;
-  caret-color:var(--purple);
-  font:13px/1.7 monospace;
-}
-textarea::placeholder { color:#655b70; }
-
-.buttons {
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-  margin-top:13px;
-}
-.btn {
-  border:1px solid var(--border);
-  background:var(--surface2);
-  color:white;
-  padding:13px 10px;
-  border-radius:11px;
-  font-size:12px;
-  font-weight:700;
-}
-.btn:active { transform:scale(.97); }
-.primary {
-  background:linear-gradient(135deg,#a875f5,#7541c4);
-  border:0;
-}
-.console {
-  height:240px;
-  overflow-y:auto;
-  background:#09070e;
-  border:1px solid var(--border);
-  border-radius:11px;
-  padding:12px;
-  font:11px/1.7 monospace;
-}
-.entry {
-  padding:6px 0;
-  border-bottom:1px solid #211a2a;
-  overflow-wrap:anywhere;
-}
-.info { color:#c7a8ff; }
-.warn { color:#f3c778; }
-.error { color:#ff8181; }
-
-.bottom-nav {
+  height:45px;
   flex-shrink:0;
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  padding:10px 10px calc(10px + env(safe-area-inset-bottom));
-  background:#130f1b;
-  border-top:1px solid var(--border);
-}
-.nav-item {
-  background:transparent;
-  border:0;
-  color:var(--muted);
-  font-size:11px;
-  padding:7px 0;
-}
-.nav-item span { display:block; font-size:19px; margin-bottom:4px; }
-.nav-item.active { color:var(--purple); }
-
-.empty {
-  text-align:center;
-  color:var(--muted);
-  font-size:13px;
-  padding:25px 5px;
-}
-.script-row {
   display:flex;
   align-items:center;
-  gap:8px;
-  margin-bottom:9px;
+  justify-content:space-between;
+  padding:0 13px;
+  border-bottom:1px solid var(--border);
+  font-size:12px;
 }
-.script-row button { flex:1; text-align:left; }
 
-@media(min-width:650px) {
-  .content { width:100%; max-width:650px; margin:auto; }
+.file-name { color:#d8d4e5; }
+
+.status {
+  color:var(--green);
+  font-size:11px;
+}
+
+.editor-area {
+  flex:1;
+  min-height:0;
+  display:flex;
+  overflow:hidden;
+  position:relative;
+}
+
+.gutter {
+  width:43px;
+  flex-shrink:0;
+  overflow:hidden;
+  padding:15px 9px 15px 0;
+  text-align:right;
+  color:#666575;
+  background:#15151b;
+  font:13px/22px monospace;
+  user-select:none;
+}
+
+.code-wrap {
+  flex:1;
+  min-width:0;
+  position:relative;
+  overflow:hidden;
+}
+
+#highlight, #editor {
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  margin:0;
+  padding:15px;
+  border:0;
+  font:13px/22px "SFMono-Regular",Consolas,monospace;
+  white-space:pre;
+  tab-size:4;
+  overflow:auto;
+}
+
+#highlight {
+  pointer-events:none;
+  color:#ddd9eb;
+}
+
+#editor {
+  resize:none;
+  outline:none;
+  background:transparent;
+  color:transparent;
+  caret-color:white;
+  -webkit-text-fill-color:transparent;
+}
+
+#editor::selection {
+  background:#9b7aff55;
+}
+
+.kw { color:#c49aff; }
+.str { color:#a8dca9; }
+.num { color:#e8bd83; }
+.comment { color:#77778a; }
+.fn { color:#86c9ef; }
+
+.editor-footer {
+  height:42px;
+  flex-shrink:0;
+  border-top:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 13px;
+  color:var(--muted);
+  font-size:11px;
+}
+
+.actions {
+  display:flex;
+  gap:9px;
+  margin-top:13px;
+}
+
+.btn {
+  flex:1;
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:var(--panel2);
+  padding:13px 8px;
+  font-size:12px;
+  font-weight:650;
+}
+
+.btn.primary {
+  background:linear-gradient(135deg,#a184ff,#7955dc);
+  border:0;
+  color:white;
+}
+
+.bottom-nav {
+  height:68px;
+  flex-shrink:0;
+  border-top:1px solid var(--border);
+  background:#141419;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+}
+
+.nav-item {
+  flex:1;
+  height:100%;
+  border:0;
+  background:transparent;
+  color:var(--muted);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  font-size:10px;
+}
+
+.nav-item .nav-icon { font-size:19px; }
+.nav-item.active { color:var(--purple); }
+
+.console-box {
+  flex:1;
+  min-height:0;
+  overflow:auto;
+  background:#141419;
+  border:1px solid var(--border);
+  border-radius:15px;
+  padding:13px;
+  font:12px/1.8 monospace;
+}
+
+.log { color:#c5c3d1; overflow-wrap:anywhere; }
+.log.info { color:#91bdf4; }
+.log.warn { color:#e8bd83; }
+.log.error { color:#ff858c; }
+.log.success { color:#7bd9a6; }
+
+.section-row {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:12px;
+}
+
+.small-btn {
+  background:var(--panel2);
+  border:1px solid var(--border);
+  border-radius:9px;
+  padding:8px 11px;
+  font-size:11px;
+}
+
+.script-list {
+  display:flex;
+  flex-direction:column;
+  gap:9px;
+  overflow:auto;
+}
+
+.script-card {
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:13px;
+  padding:14px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.script-title { font-size:13px; font-weight:650; }
+.script-meta { font-size:11px; color:var(--muted); margin-top:5px; }
+
+.script-actions { display:flex; gap:6px; }
+
+.empty {
+  color:var(--muted);
+  font-size:12px;
+  text-align:center;
+  padding:35px 10px;
+}
+
+#floatButton {
+  position:fixed;
+  z-index:20;
+  left:20px;
+  top:45%;
+  width:53px;
+  height:53px;
+  border-radius:18px;
+  border:1px solid #b59cff;
+  background:linear-gradient(145deg,#a487ff,#704bd1);
+  box-shadow:0 7px 28px #0008,0 0 20px #9570ff45;
+  display:grid;
+  place-items:center;
+  font-size:24px;
+  font-weight:900;
+  touch-action:none;
+  user-select:none;
+}
+
+#floatButton.hidden { display:none; }
+
+@media(min-width:700px) {
+  #app {
+    width:min(620px,calc(100% - 40px));
+    height:min(800px,calc(100% - 50px));
+    inset:50% auto auto 50%;
+    border:1px solid var(--border);
+    border-radius:23px;
+    overflow:hidden;
+    transform:translate(-50%,-48%);
+  }
+  #app.open { transform:translate(-50%,-50%); }
+  .page { padding:22px; }
+}
+
+@media(max-height:600px) {
+  .topbar { height:53px; }
+  .bottom-nav { height:55px; }
+  .page { padding:10px; }
 }
 </style>
 </head>
 
 <body>
 
-<button id="astra-float" aria-label="Open Astra">A</button>
+<button id="floatButton" aria-label="Open Astra">A</button>
 
-<div id="astra-app">
-
-<header class="app-header">
-  <div class="brand">
-    ASTRA
-    <small>MOBILE DEVELOPMENT</small>
-  </div>
-  <div class="header-actions">
-    <span class="online">● READY</span>
-    <button class="close-btn" id="closeBtn">✕</button>
-  </div>
-</header>
-
-<main class="content">
-
-<section id="editorPage" class="page active">
-  <div class="welcome">
-    <h1>Welcome to Astra.</h1>
-    <p>Your mobile Luau development environment.</p>
-  </div>
-
-  <div class="card">
-    <div class="section-head">
-      <h3>SCRIPT EDITOR</h3>
-      <span class="tag">LUAU</span>
-    </div>
-    <div class="editor-wrap">
-      <div class="editor-top">
-        <span>untitled.lua</span>
-        <span id="charCount">0 characters</span>
+<main id="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">A</div>
+      <div>
+        <div class="brand-name">astra</div>
+        <div class="brand-sub">Mobile Studio</div>
       </div>
-      <textarea id="editor" spellcheck="false"
-        autocapitalize="off" autocomplete="off"
-        placeholder="-- Write your Luau code here..."></textarea>
     </div>
-    <div class="buttons">
-      <button class="btn primary" id="testBtn">Test script</button>
-      <button class="btn" id="clearEditorBtn">Clear</button>
+    <div class="top-actions">
+      <button class="icon-btn" id="saveTop" aria-label="Save">↓</button>
+      <button class="icon-btn" id="closeApp" aria-label="Close">×</button>
     </div>
-  </div>
+  </header>
 
-  <div class="card">
-    <div class="section-head">
-      <h3>ENVIRONMENT</h3>
-      <span class="tag">STATUS</span>
-    </div>
-    <p style="font-size:12px;color:#91869f">
-      Interface initialized. Sandboxed Luau runtime not connected.
-    </p>
-  </div>
-</section>
+  <section class="content">
 
-<section id="consolePage" class="page">
-  <div class="welcome">
-    <h1>Console</h1>
-    <p>Monitor messages and test results.</p>
-  </div>
-  <div class="card">
-    <div class="section-head">
-      <h3>LOG OUTPUT</h3>
-      <span class="tag" id="logCount">0 ENTRIES</span>
-    </div>
-    <div class="console" id="logs"></div>
-    <div class="buttons">
-      <button class="btn" id="clearLogsBtn">Clear logs</button>
-      <button class="btn primary" id="copyLogsBtn">Copy output</button>
-    </div>
-  </div>
-</section>
+    <div class="page active" id="editorPage">
+      <div class="heading">Editor</div>
+      <div class="subheading">Write and organize your Luau projects.</div>
 
-<section id="libraryPage" class="page">
-  <div class="welcome">
-    <h1>Script Library</h1>
-    <p>Manage your saved scripts.</p>
-  </div>
-  <div class="card">
-    <div class="section-head">
-      <h3>MY SCRIPTS</h3>
-      <span class="tag">LIBRARY</span>
+      <div class="editor-card">
+        <div class="editor-top">
+          <span class="file-name">◇ main.luau</span>
+          <span class="status">● Local editor</span>
+        </div>
+
+        <div class="editor-area">
+          <div class="gutter" id="gutter">1</div>
+          <div class="code-wrap">
+            <pre id="highlight" aria-hidden="true"></pre>
+            <textarea id="editor" autocapitalize="off" autocomplete="off"
+              autocorrect="off" spellcheck="false"
+              wrap="off" aria-label="Luau code editor">-- Welcome to Astra
+-- Your mobile Luau workspace
+
+local message = "Hello, Astra!"
+
+print(message)</textarea>
+          </div>
+        </div>
+
+        <div class="editor-footer">
+          <span id="lineCount">5 lines</span>
+          <span id="charCount">0 characters</span>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn" id="clearEditor">Clear</button>
+        <button class="btn" id="copyCode">Copy code</button>
+        <button class="btn primary" id="testCode">Test editor</button>
+      </div>
     </div>
-    <div id="library"></div>
-    <button class="btn primary" style="width:100%" id="saveBtn">
-      Save current script
+
+    <div class="page" id="consolePage">
+      <div class="heading">Console</div>
+      <div class="subheading">View messages from your workspace.</div>
+
+      <div class="section-row">
+        <span style="font-size:12px;color:var(--muted)">OUTPUT</span>
+        <div style="display:flex;gap:7px">
+          <button class="small-btn" id="copyLogs">Copy</button>
+          <button class="small-btn" id="clearLogs">Clear</button>
+        </div>
+      </div>
+
+      <div class="console-box" id="consoleOutput">
+        <div class="log info">Astra Mobile Studio initialized.</div>
+        <div class="log">Ready for your next project.</div>
+      </div>
+    </div>
+
+    <div class="page" id="libraryPage">
+      <div class="heading">Library</div>
+      <div class="subheading">Your saved scripts, stored on this device.</div>
+
+      <div class="section-row">
+        <span style="font-size:12px;color:var(--muted)">MY SCRIPTS</span>
+        <button class="small-btn" id="saveScript">＋ Save current</button>
+      </div>
+
+      <div class="script-list" id="scriptList"></div>
+    </div>
+
+  </section>
+
+  <nav class="bottom-nav">
+    <button class="nav-item active" data-page="editorPage">
+      <span class="nav-icon">⌘</span>Editor
     </button>
-  </div>
-</section>
-
+    <button class="nav-item" data-page="consolePage">
+      <span class="nav-icon">▤</span>Console
+    </button>
+    <button class="nav-item" data-page="libraryPage">
+      <span class="nav-icon">▣</span>Library
+    </button>
+  </nav>
 </main>
 
-<nav class="bottom-nav">
-  <button class="nav-item active" data-page="editor">
-    <span>⌨</span>Editor
-  </button>
-  <button class="nav-item" data-page="console">
-    <span>▤</span>Console
-  </button>
-  <button class="nav-item" data-page="library">
-    <span>▣</span>Library
-  </button>
-</nav>
-
-</div>
-
 <script>
-const app = document.getElementById("astra-app");
-const floating = document.getElementById("astra-float");
-const editor = document.getElementById("editor");
-const logs = document.getElementById("logs");
-const library = document.getElementById("library");
+const $ = id => document.getElementById(id);
 
-const STORAGE_KEY = "astra_scripts_v2";
+const app = $("app");
+const floatButton = $("floatButton");
+const editor = $("editor");
+const highlight = $("highlight");
+const gutter = $("gutter");
+const consoleOutput = $("consoleOutput");
+
+function log(message, type = "") {
+  const item = document.createElement("div");
+  item.className = "log " + type;
+  item.textContent = "[" + new Date().toLocaleTimeString() + "] " + message;
+  consoleOutput.appendChild(item);
+  consoleOutput.scrollTop = consoleOutput.scrollHeight;
+}
+
+function escapeHTML(value) {
+  return value.replace(/[&<>"']/g, char => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;",
+    '"':"&quot;", "'":"&#39;"
+  })[char]);
+}
+
+function colorize(code) {
+  let safe = escapeHTML(code);
+  const tokens = /(--[^\n]*|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|\b\d+(?:\.\d+)?\b|\b(?:local|function|end|if|then|else|elseif|for|while|do|repeat|until|return|true|false|nil|and|or|not|in|break)\b|\b(?:print|warn|require|pairs|ipairs|type|tostring|tonumber|game|workspace|script)\b)/g;
+
+  return safe.replace(tokens, token => {
+    let cls = "kw";
+    if (token.startsWith("--")) cls = "comment";
+    else if (token.startsWith('"') || token.startsWith("'")) cls = "str";
+    else if (/^\d/.test(token)) cls = "num";
+    else if (/^(print|warn|require|pairs|ipairs|type|tostring|tonumber|game|workspace|script)$/.test(token)) cls = "fn";
+    return '<span class="' + cls + '">' + token + '</span>';
+  });
+}
+
+function updateEditor() {
+  const code = editor.value;
+  highlight.innerHTML = colorize(code) + (code.endsWith("\n") ? " " : "");
+  const lines = code.split("\n").length;
+  gutter.textContent = Array.from({length:lines}, (_,i)=>i+1).join("\n");
+  $("lineCount").textContent = lines + (lines === 1 ? " line" : " lines");
+  $("charCount").textContent = code.length + " characters";
+  highlight.scrollTop = editor.scrollTop;
+  highlight.scrollLeft = editor.scrollLeft;
+  gutter.scrollTop = editor.scrollTop;
+}
+
+editor.addEventListener("input", updateEditor);
+editor.addEventListener("scroll", updateEditor);
+
+editor.addEventListener("keydown", event => {
+  if (event.key === "Tab") {
+    event.preventDefault();
+    const start = editor.selectionStart;
+    const end = editor.selectionEnd;
+    editor.setRangeText("    ", start, end, "end");
+    updateEditor();
+  }
+
+  if (event.key === "Enter") {
+    const start = editor.selectionStart;
+    const before = editor.value.slice(0,start);
+    const currentLine = before.split("\n").pop();
+    const indent = (currentLine.match(/^\s*/) || [""])[0];
+    if (indent) {
+      event.preventDefault();
+      editor.setRangeText("\n" + indent, start, editor.selectionEnd, "end");
+      updateEditor();
+    }
+  }
+});
+
+function switchPage(pageId) {
+  document.querySelectorAll(".page").forEach(page => {
+    page.classList.toggle("active", page.id === pageId);
+  });
+  document.querySelectorAll(".nav-item").forEach(button => {
+    button.classList.toggle("active", button.dataset.page === pageId);
+  });
+}
+
+document.querySelectorAll(".nav-item").forEach(button => {
+  button.addEventListener("click", () => switchPage(button.dataset.page));
+});
+
+function openApp() {
+  app.classList.add("open");
+  floatButton.classList.add("hidden");
+}
+
+function closeApp() {
+  app.classList.remove("open");
+  floatButton.classList.remove("hidden");
+}
+
+$("closeApp").addEventListener("click", closeApp);
+floatButton.addEventListener("click", openApp);
 
 let savedScripts = [];
 try {
-  const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-  if (Array.isArray(stored)) savedScripts = stored;
+  savedScripts = JSON.parse(localStorage.getItem("astra_scripts") || "[]");
+  if (!Array.isArray(savedScripts)) savedScripts = [];
 } catch {
   savedScripts = [];
 }
 
 function persistScripts() {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(savedScripts));
-    return true;
+    localStorage.setItem("astra_scripts", JSON.stringify(savedScripts));
   } catch {
-    log("Storage unavailable or full.", "error");
-    return false;
-  }
-}
-
-function openAstra() {
-  app.classList.add("open");
-  floating.style.display = "none";
-}
-
-function closeAstra() {
-  app.classList.remove("open");
-  floating.style.display = "block";
-}
-
-document.getElementById("closeBtn").addEventListener("click", closeAstra);
-floating.addEventListener("click", openAstra);
-
-document.querySelectorAll(".nav-item").forEach(button => {
-  button.addEventListener("click", () => {
-    navigate(button.dataset.page, button);
-  });
-});
-
-function navigate(page, button) {
-  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-  document.getElementById(page + "Page").classList.add("active");
-
-  document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
-  button.classList.add("active");
-}
-
-function log(message, type="info") {
-  const entry = document.createElement("div");
-  entry.className = "entry " + type;
-  entry.textContent = "[" + new Date().toLocaleTimeString() + "] " + message;
-
-  logs.appendChild(entry);
-  logs.scrollTop = logs.scrollHeight;
-
-  document.getElementById("logCount").textContent =
-    logs.children.length + " ENTRIES";
-}
-
-editor.addEventListener("input", () => {
-  document.getElementById("charCount").textContent =
-    editor.value.length + " characters";
-});
-
-function testScript() {
-  if (!editor.value.trim()) {
-    log("Editor is empty.", "warn");
-    return;
-  }
-
-  log("Test started.");
-  log("Received " + editor.value.length + " characters.");
-  log("Luau runtime not connected yet.", "warn");
-}
-
-function clearEditor() {
-  editor.value = "";
-  editor.dispatchEvent(new Event("input"));
-  log("Editor cleared.");
-}
-
-function clearLogs() {
-  logs.replaceChildren();
-  document.getElementById("logCount").textContent = "0 ENTRIES";
-}
-
-async function copyLogs() {
-  const content = Array.from(logs.children)
-    .map(item => item.textContent).join("\n");
-
-  try {
-    await navigator.clipboard.writeText(content);
-    log("Output copied.");
-  } catch {
-    log("Clipboard unavailable.", "error");
+    log("Could not save scripts. Device storage may be full.", "error");
   }
 }
 
 function renderLibrary() {
-  library.replaceChildren();
+  const list = $("scriptList");
+  list.replaceChildren();
 
   if (!savedScripts.length) {
     const empty = document.createElement("div");
     empty.className = "empty";
-    empty.textContent = "No saved scripts yet.";
-    library.appendChild(empty);
+    empty.textContent = "No saved scripts yet. Save your first project here.";
+    list.appendChild(empty);
     return;
   }
 
-  savedScripts.forEach((script, index) => {
-    const row = document.createElement("div");
-    row.className = "script-row";
+  savedScripts.forEach((script,index) => {
+    const card = document.createElement("div");
+    card.className = "script-card";
+
+    const info = document.createElement("div");
+    const title = document.createElement("div");
+    title.className = "script-title";
+    title.textContent = script.name;
+
+    const meta = document.createElement("div");
+    meta.className = "script-meta";
+    meta.textContent = script.code.split("\n").length + " lines";
+
+    info.append(title,meta);
+
+    const actions = document.createElement("div");
+    actions.className = "script-actions";
 
     const load = document.createElement("button");
-    load.className = "btn";
-    load.textContent = script.name;
+    load.className = "small-btn";
+    load.textContent = "Open";
     load.addEventListener("click", () => {
       editor.value = script.code;
-      editor.dispatchEvent(new Event("input"));
-      navigate("editor", document.querySelector('[data-page="editor"]'));
-      log(script.name + " loaded.");
+      updateEditor();
+      switchPage("editorPage");
+      log("Opened " + script.name, "success");
     });
 
     const remove = document.createElement("button");
-    remove.className = "btn";
-    remove.textContent = "×";
-    remove.setAttribute("aria-label", "Delete " + script.name);
-
+    remove.className = "small-btn";
+    remove.textContent = "Delete";
     remove.addEventListener("click", () => {
-      savedScripts.splice(index, 1);
+      savedScripts.splice(index,1);
       persistScripts();
       renderLibrary();
-      log("Script removed.");
+      log("Deleted saved project.", "warn");
     });
 
-    row.append(load, remove);
-    library.appendChild(row);
+    actions.append(load,remove);
+    card.append(info,actions);
+    list.appendChild(card);
   });
 }
 
-function saveScript() {
-  const code = editor.value.trim();
+$("saveScript").addEventListener("click", () => {
+  const name = prompt("Name your script:", "My Luau Script");
+  if (!name || !name.trim()) return;
 
-  if (!code) {
-    log("Nothing to save.", "warn");
-    return;
-  }
+  savedScripts.unshift({
+    name:name.trim(),
+    code:editor.value
+  });
 
-  const name = "Script " + (savedScripts.length + 1);
-  savedScripts.push({ name, code });
-
-  if (!persistScripts()) {
-    savedScripts.pop();
-    return;
-  }
-
+  persistScripts();
   renderLibrary();
-  log(name + " saved.");
-}
+  log("Saved " + name.trim(), "success");
+});
 
-document.getElementById("testBtn").addEventListener("click", testScript);
-document.getElementById("clearEditorBtn").addEventListener("click", clearEditor);
-document.getElementById("clearLogsBtn").addEventListener("click", clearLogs);
-document.getElementById("copyLogsBtn").addEventListener("click", copyLogs);
-document.getElementById("saveBtn").addEventListener("click", saveScript);
+$("clearEditor").addEventListener("click", () => {
+  if (!confirm("Clear the editor?")) return;
+  editor.value = "";
+  updateEditor();
+  log("Editor cleared.", "warn");
+});
 
-// Floating button drag support.
-let pointerStart = null;
-let moved = false;
+$("copyCode").addEventListener("click", async () => {
+  try {
+    await navigator.clipboard.writeText(editor.value);
+    log("Code copied to clipboard.", "success");
+  } catch {
+    log("Clipboard unavailable in this browser.", "error");
+  }
+});
+
+$("saveTop").addEventListener("click", () => $("saveScript").click());
+
+$("testCode").addEventListener("click", () => {
+  log("Editor check complete. " + editor.value.split("\n").length + " lines detected.", "success");
+  log("This workspace does not execute Luau or connect to Roblox.", "info");
+});
+
+$("clearLogs").addEventListener("click", () => {
+  consoleOutput.replaceChildren();
+  log("Console cleared.", "info");
+});
+
+$("copyLogs").addEventListener("click", async () => {
+  const text = [...consoleOutput.children].map(item => item.textContent).join("\n");
+  try {
+    await navigator.clipboard.writeText(text);
+    log("Console output copied.", "success");
+  } catch {
+    log("Could not copy console output.", "error");
+  }
+});
+
+// Draggable floating button
 let dragging = false;
+let moved = false;
+let startX = 0, startY = 0, originalX = 0, originalY = 0;
 
-floating.addEventListener("pointerdown", event => {
-  pointerStart = {
-    x: event.clientX,
-    y: event.clientY,
-    left: floating.getBoundingClientRect().left,
-    top: floating.getBoundingClientRect().top
-  };
+floatButton.addEventListener("pointerdown", event => {
+  dragging = true;
   moved = false;
-  dragging = false;
-  floating.setPointerCapture(event.pointerId);
+  startX = event.clientX;
+  startY = event.clientY;
+  const rect = floatButton.getBoundingClientRect();
+  originalX = rect.left;
+  originalY = rect.top;
+  floatButton.setPointerCapture(event.pointerId);
 });
 
-floating.addEventListener("pointermove", event => {
-  if (!pointerStart) return;
-
-  const dx = event.clientX - pointerStart.x;
-  const dy = event.clientY - pointerStart.y;
-
-  if (!dragging && Math.hypot(dx, dy) > 8) {
-    dragging = true;
-    moved = true;
-  }
-
+floatButton.addEventListener("pointermove", event => {
   if (!dragging) return;
+  const dx = event.clientX - startX;
+  const dy = event.clientY - startY;
+  if (Math.abs(dx) + Math.abs(dy) > 7) moved = true;
+  if (!moved) return;
 
-  const x = Math.max(0, Math.min(innerWidth - 60, pointerStart.left + dx));
-  const y = Math.max(0, Math.min(innerHeight - 60, pointerStart.top + dy));
-
-  floating.style.left = x + "px";
-  floating.style.top = y + "px";
-  floating.style.right = "auto";
-  floating.style.bottom = "auto";
+  const x = Math.max(5,Math.min(innerWidth - 58,originalX + dx));
+  const y = Math.max(5,Math.min(innerHeight - 58,originalY + dy));
+  floatButton.style.left = x + "px";
+  floatButton.style.top = y + "px";
 });
 
-floating.addEventListener("pointerup", () => {
-  pointerStart = null;
+floatButton.addEventListener("pointerup", () => {
+  if (!dragging) return;
   dragging = false;
+  if (!moved) openApp();
 });
 
-floating.addEventListener("click", event => {
-  if (moved) {
-    event.stopImmediatePropagation();
-    moved = false;
-  }
-}, true);
-
+updateEditor();
 renderLibrary();
-log("Astra initialized.");
-log("Persistent script storage ready.");
-log("Console ready.");
 </script>
-
 </body>
 </html>
